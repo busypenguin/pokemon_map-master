@@ -7,7 +7,11 @@ class Pokemon(models.Model):
     title = models.CharField(max_length=200, blank=True)
     photo = models.ImageField(blank=True)
 
-
     def __str__(self):
         if self.title:
             return self.title
+
+
+class PokemonEntity(models.Model):
+    latitude = models.FloatField(blank=True)  #широта
+    longitude = models.FloatField(blank=True)  #долгота
