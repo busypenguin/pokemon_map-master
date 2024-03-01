@@ -6,6 +6,7 @@ from django.db import models  # noqa F401
 class Pokemon(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=200, blank=True)
+    description = models.TextField(blank=True)
     photo = models.ImageField(blank=True)
 
     def __str__(self):
