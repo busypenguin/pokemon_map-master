@@ -87,6 +87,10 @@ def show_pokemon(request, pokemon_id):
     dict_pokemon['img_url'] = request.build_absolute_uri(photo)
     dict_pokemon['title_ru'] = pokemon.title
     dict_pokemon['description'] = pokemon.description
+    dict_pokemon['title_en'] = pokemon.title_en
+    dict_pokemon['title_jp'] = pokemon.title_jp
+
+    
         # return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
