@@ -77,6 +77,7 @@ def show_pokemon(request, pokemon_id):
     pokemon = Pokemon.objects.get(id=pokemon_id)
     dict_pokemon = {}
     previous_evolution_pokemon = {}
+    next_evolution_pokemon = {}
     if pokemon.photo:
         photo = str(pokemon.photo.url)
     else:
@@ -90,13 +91,20 @@ def show_pokemon(request, pokemon_id):
     dict_pokemon['description'] = pokemon.description
     dict_pokemon['title_en'] = pokemon.title_en
     dict_pokemon['title_jp'] = pokemon.title_jp
+    
     if pokemon.previous_evolution:
         new_pokemon = pokemon.previous_evolution
         previous_evolution_pokemon['title_ru'] = new_pokemon.title
         previous_evolution_pokemon['pokemon_id'] = new_pokemon.id
         previous_evolution_pokemon['img_url'] = request.build_absolute_uri(new_pokemon.photo.url)
         dict_pokemon['previous_evolution'] = previous_evolution_pokemon
-    
+        
+    if pokemon.next_evolution.all():
+        new_pokemon1 = pokemon.next_evolution.get()
+        next_evolution_pokemon['title_ru'] = new_pokemon1.title
+        next_evolution_pokemon['pokemon_id'] = new_pokemon1.id
+        next_evolution_pokemon['img_url'] = request.build_absolute_uri(new_pokemon1.photo.url)
+        dict_pokemon['next_evolution'] = next_evolution_pokemon
         # return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
