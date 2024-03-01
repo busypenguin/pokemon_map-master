@@ -76,6 +76,7 @@ def show_pokemon(request, pokemon_id):
     #         dict_pokemon['title_ru'] = json_pokemons[pokemon]['title_ru']
     pokemon = Pokemon.objects.get(id=pokemon_id)
     dict_pokemon = {}
+    previous_evolution_pokemon = {}
     if pokemon.photo:
         photo = str(pokemon.photo.url)
     else:
@@ -89,7 +90,12 @@ def show_pokemon(request, pokemon_id):
     dict_pokemon['description'] = pokemon.description
     dict_pokemon['title_en'] = pokemon.title_en
     dict_pokemon['title_jp'] = pokemon.title_jp
-
+    if pokemon.previous_evolution:
+        new_pokemon = pokemon.previous_evolution
+        previous_evolution_pokemon['title_ru'] = new_pokemon.title
+        previous_evolution_pokemon['pokemon_id'] = new_pokemon.id
+        previous_evolution_pokemon['img_url'] = request.build_absolute_uri(new_pokemon.photo.url)
+        dict_pokemon['previous_evolution'] = previous_evolution_pokemon
     
         # return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
 
