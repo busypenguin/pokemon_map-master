@@ -7,7 +7,6 @@ class Pokemon(models.Model):
     """Покемон"""
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=200,
-                             blank=True,
                              verbose_name='Имя')
     description = models.TextField(blank=True,
                                    verbose_name='Описание')
