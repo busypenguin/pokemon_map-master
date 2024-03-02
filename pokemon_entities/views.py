@@ -99,8 +99,8 @@ def show_pokemon(request, pokemon_id):
         previous_evolution_pokemon['img_url'] = request.build_absolute_uri(new_pokemon.photo.url)
         dict_pokemon['previous_evolution'] = previous_evolution_pokemon
         
-    if pokemon.next_evolution.all():
-        new_pokemon1 = pokemon.next_evolution.get()
+    if pokemon.next_evolutions.all():
+        new_pokemon1 = pokemon.next_evolutions.get()
         next_evolution_pokemon['title_ru'] = new_pokemon1.title
         next_evolution_pokemon['pokemon_id'] = new_pokemon1.id
         next_evolution_pokemon['img_url'] = request.build_absolute_uri(new_pokemon1.photo.url)
