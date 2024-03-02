@@ -22,8 +22,7 @@ class Pokemon(models.Model):
                                            verbose_name='Из кого эволюционировал')
 
     def __str__(self):
-        if self.title:
-            return self.title
+        return self.title
 
 
 class PokemonEntity(models.Model):
