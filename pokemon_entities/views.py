@@ -65,17 +65,10 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    # with open('pokemon_entities/pokemons.json', encoding='utf-8') as database:
-    #     json_pokemons = json.load(database)['pokemons']
-        
-    # for json_pokemon in json_pokemons:
-    #     if pokemon:
-    #         dict_pokemon['img_url'] = json_pokemons[pokemon]['img_url']
-    #         dict_pokemon['title_ru'] = json_pokemons[pokemon]['title_ru']
     pokemon = Pokemon.objects.get(id=pokemon_id)
     dict_pokemon = {}
     previous_evolution_pokemon = {}
-    next_evolution_pokemon = {}      
+    next_evolution_pokemon = {}
     if pokemon.id == int(pokemon_id):
         requested_pokemon = PokemonEntity.objects.filter(pokemon=pokemon, appeared_at__lt=timezone.localtime(), disappeared_at__gt=timezone.localtime())
 
@@ -84,14 +77,14 @@ def show_pokemon(request, pokemon_id):
     dict_pokemon['description'] = pokemon.description
     dict_pokemon['title_en'] = pokemon.title_en
     dict_pokemon['title_jp'] = pokemon.title_jp
-    
+
     if pokemon.previous_evolution:
         new_pokemon = pokemon.previous_evolution
         previous_evolution_pokemon['title_ru'] = new_pokemon.title
         previous_evolution_pokemon['pokemon_id'] = new_pokemon.id
         previous_evolution_pokemon['img_url'] = request.build_absolute_uri(check_pokemon_photo(new_pokemon))
         dict_pokemon['previous_evolution'] = previous_evolution_pokemon
-        
+
     if pokemon.next_evolutions.all():
         new_pokemon1 = pokemon.next_evolutions.get()
         next_evolution_pokemon['title_ru'] = new_pokemon1.title
