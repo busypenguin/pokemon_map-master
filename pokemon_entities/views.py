@@ -100,10 +100,8 @@ def show_pokemon(request, pokemon_id):
             'title_ru': new_pokemon1.title,
             'pokemon_id': new_pokemon1.id,
             'img_url': request.build_absolute_uri(check_pokemon_photo(new_pokemon1)),
-            'next_evolution': next_evolution_pokemon    
+            'next_evolution': next_evolution_pokemon
         }
-
-        # return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     for pokemon_entity in requested_pokemon:
