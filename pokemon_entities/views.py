@@ -32,7 +32,7 @@ def check_pokemon_photo(pokemon):
     if pokemon.photo:
         photo = str(pokemon.photo.url)
     else:
-        photo = None
+        photo = DEFAULT_IMAGE_URL
     return photo
 
 
