@@ -1,6 +1,7 @@
 import folium
 import json
 
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
 from pokemon_entities.models import (Pokemon, PokemonEntity)
@@ -35,6 +36,11 @@ def check_pokemon_photo(pokemon):
         return DEFAULT_IMAGE_URL
 
 
+def find_pokemon(request, pokemon_id):
+    pokemon = get_object_or_404(Pokemon, id=pokemon_id)
+    return pokemon
+
+
 def show_all_pokemons(request):
 
     pokemons = Pokemon.objects.all()
@@ -65,7 +71,7 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    pokemon = Pokemon.objects.get(id=pokemon_id)
+    pokemon = find_pokemon(request, pokemon_id)
     dict_pokemon = {}
     previous_evolution_pokemon = {}
     next_evolution_pokemon = {}
