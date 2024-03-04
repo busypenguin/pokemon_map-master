@@ -28,6 +28,14 @@ def add_pokemon(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
     ).add_to(folium_map)
 
 
+def check_pokemon_photo(pokemon):
+    if pokemon.photo:
+        photo = str(pokemon.photo.url)
+    else:
+        photo = None
+    return photo
+
+
 def show_all_pokemons(request):
 
     pokemons = Pokemon.objects.all()
@@ -36,28 +44,18 @@ def show_all_pokemons(request):
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
 
     for pokemon in pokemons:
-        if pokemon.photo:
-            photo = str(pokemon.photo.url)
-        else:
-            photo = None
-
         for pokemon_entity in pokemons_entity:
             add_pokemon(
                 folium_map, pokemon_entity.latitude,
                 pokemon_entity.longitude,
-                request.build_absolute_uri(photo)
+                request.build_absolute_uri(check_pokemon_photo(pokemon))
                 )
 
     pokemons_on_page = []
     for pokemon in pokemons:
-        if pokemon.photo:
-            photo = str(pokemon.photo.url)
-        else:
-            photo = None
-        
         pokemons_on_page.append({
             'pokemon_id': pokemon.id,
-            'img_url': request.build_absolute_uri(photo),
+            'img_url': request.build_absolute_uri(check_pokemon_photo(pokemon)),
             'title_ru': pokemon,
         })
 
@@ -78,16 +76,11 @@ def show_pokemon(request, pokemon_id):
     pokemon = Pokemon.objects.get(id=pokemon_id)
     dict_pokemon = {}
     previous_evolution_pokemon = {}
-    next_evolution_pokemon = {}
-    if pokemon.photo:
-        photo = str(pokemon.photo.url)
-    else:
-        photo = None
-        
+    next_evolution_pokemon = {}      
     if pokemon.id == int(pokemon_id):
         requested_pokemon = PokemonEntity.objects.filter(pokemon=pokemon, appeared_at__lt=timezone.localtime(), disappeared_at__gt=timezone.localtime())
 
-    dict_pokemon['img_url'] = request.build_absolute_uri(photo)
+    dict_pokemon['img_url'] = request.build_absolute_uri(check_pokemon_photo(pokemon))
     dict_pokemon['title_ru'] = pokemon.title
     dict_pokemon['description'] = pokemon.description
     dict_pokemon['title_en'] = pokemon.title_en
@@ -97,14 +90,14 @@ def show_pokemon(request, pokemon_id):
         new_pokemon = pokemon.previous_evolution
         previous_evolution_pokemon['title_ru'] = new_pokemon.title
         previous_evolution_pokemon['pokemon_id'] = new_pokemon.id
-        previous_evolution_pokemon['img_url'] = request.build_absolute_uri(new_pokemon.photo.url)
+        previous_evolution_pokemon['img_url'] = request.build_absolute_uri(check_pokemon_photo(new_pokemon))
         dict_pokemon['previous_evolution'] = previous_evolution_pokemon
         
     if pokemon.next_evolutions.all():
         new_pokemon1 = pokemon.next_evolutions.get()
         next_evolution_pokemon['title_ru'] = new_pokemon1.title
         next_evolution_pokemon['pokemon_id'] = new_pokemon1.id
-        next_evolution_pokemon['img_url'] = request.build_absolute_uri(new_pokemon1.photo.url)
+        next_evolution_pokemon['img_url'] = request.build_absolute_uri(check_pokemon_photo(new_pokemon1))
         dict_pokemon['next_evolution'] = next_evolution_pokemon
         # return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
 
@@ -113,7 +106,7 @@ def show_pokemon(request, pokemon_id):
         add_pokemon(
             folium_map, pokemon_entity.latitude,
             pokemon_entity.longitude,
-            request.build_absolute_uri(photo)
+            request.build_absolute_uri(check_pokemon_photo(pokemon))
         )
 
     return render(request, 'pokemon.html', context={
