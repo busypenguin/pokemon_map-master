@@ -78,25 +78,31 @@ def show_pokemon(request, pokemon_id):
     if pokemon.id == int(pokemon_id):
         requested_pokemon = PokemonEntity.objects.filter(pokemon=pokemon, appeared_at__lt=timezone.localtime(), disappeared_at__gt=timezone.localtime())
 
-    dict_pokemon['img_url'] = request.build_absolute_uri(check_pokemon_photo(pokemon))
-    dict_pokemon['title_ru'] = pokemon.title
-    dict_pokemon['description'] = pokemon.description
-    dict_pokemon['title_en'] = pokemon.title_en
-    dict_pokemon['title_jp'] = pokemon.title_jp
+    dict_pokemon = {
+        'img_url': request.build_absolute_uri(check_pokemon_photo(pokemon)),
+        'title_ru': pokemon.title,
+        'description': pokemon.description,
+        'title_en': pokemon.title_en,
+        'title_jp': pokemon.title_jp,
+    }
 
     if pokemon.previous_evolution:
         new_pokemon = pokemon.previous_evolution
-        previous_evolution_pokemon['title_ru'] = new_pokemon.title
-        previous_evolution_pokemon['pokemon_id'] = new_pokemon.id
-        previous_evolution_pokemon['img_url'] = request.build_absolute_uri(check_pokemon_photo(new_pokemon))
-        dict_pokemon['previous_evolution'] = previous_evolution_pokemon
-
+        previous_evolution_pokemon = {
+            'title_ru': new_pokemon.title,
+            'pokemon_id': new_pokemon.id,
+            'img_url': request.build_absolute_uri(check_pokemon_photo(new_pokemon)),
+            'previous_evolution': previous_evolution_pokemon
+        }
     if pokemon.next_evolutions.all():
         new_pokemon1 = pokemon.next_evolutions.get()
-        next_evolution_pokemon['title_ru'] = new_pokemon1.title
-        next_evolution_pokemon['pokemon_id'] = new_pokemon1.id
-        next_evolution_pokemon['img_url'] = request.build_absolute_uri(check_pokemon_photo(new_pokemon1))
-        dict_pokemon['next_evolution'] = next_evolution_pokemon
+        next_evolution_pokemon = {
+            'title_ru': new_pokemon1.title,
+            'pokemon_id': new_pokemon1.id,
+            'img_url': request.build_absolute_uri(check_pokemon_photo(new_pokemon1)),
+            'next_evolution': next_evolution_pokemon    
+        }
+
         # return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
