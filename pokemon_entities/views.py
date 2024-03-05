@@ -81,6 +81,7 @@ def show_pokemon(request, pokemon_id):
 
     if pokemon.previous_evolution:
         new_pokemon = pokemon.previous_evolution
+        previous_evolution_pokemon = {}
         previous_evolution_pokemon = {
             'title_ru': new_pokemon.title,
             'pokemon_id': new_pokemon.id,
@@ -89,6 +90,7 @@ def show_pokemon(request, pokemon_id):
         }
     if pokemon.next_evolutions.all():
         new_pokemon1 = pokemon.next_evolutions.get()
+        next_evolution_pokemon = {}
         next_evolution_pokemon = {
             'title_ru': new_pokemon1.title,
             'pokemon_id': new_pokemon1.id,
