@@ -75,8 +75,9 @@ def show_pokemon(request, pokemon_id):
     dict_pokemon = {}
     previous_evolution_pokemon = {}
     next_evolution_pokemon = {}
+    right_now = timezone.localtime()
     if pokemon.id == int(pokemon_id):
-        requested_pokemon = PokemonEntity.objects.filter(pokemon=pokemon, appeared_at__lt=timezone.localtime(), disappeared_at__gt=timezone.localtime())
+        requested_pokemon = PokemonEntity.objects.filter(pokemon=pokemon, appeared_at__lt=right_now, disappeared_at__gt=right_now)
 
     dict_pokemon = {
         'img_url': request.build_absolute_uri(check_pokemon_photo(pokemon)),
