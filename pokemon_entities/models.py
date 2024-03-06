@@ -29,7 +29,7 @@ class PokemonEntity(models.Model):
     """Сущность покемона"""
     pokemon = models.ForeignKey(Pokemon,
                                 on_delete=models.CASCADE,
-                                related_name='pokemon',
+                                related_name='entities',
                                 verbose_name='Покемон')
     latitude = models.FloatField(null=True,
                                  blank=True,
@@ -60,4 +60,4 @@ class PokemonEntity(models.Model):
                                   verbose_name='Выносливость')
 
     def __str__(self):
-        return str(self.pokemon)
+        return self.pokemon
