@@ -60,4 +60,4 @@ class PokemonEntity(models.Model):
                                   verbose_name='Выносливость')
 
     def __str__(self):
-        return self.pokemon, self.appeared_at
+        return str(self.pokemon)
