@@ -43,13 +43,13 @@ def show_all_pokemons(request):
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
 
     pokemons_on_page = []
+    for pokemon_entity in pokemon_entities:
+        add_pokemon(
+            folium_map, pokemon_entity.latitude,
+            pokemon_entity.longitude,
+            request.build_absolute_uri(check_pokemon_photo(pokemon_entity.pokemon))
+            )
     for pokemon in pokemons:
-        for pokemon_entity in pokemon_entities:
-            add_pokemon(
-                folium_map, pokemon_entity.latitude,
-                pokemon_entity.longitude,
-                request.build_absolute_uri(check_pokemon_photo(pokemon_entity.pokemon))
-                )
         pokemons_on_page.append({
             'pokemon_id': pokemon.id,
             'img_url': request.build_absolute_uri(check_pokemon_photo(pokemon)),
@@ -74,8 +74,8 @@ def show_pokemon(request, pokemon_id):
         'title_jp': pokemon.title_jp,
     }
     previous_evolution_pokemon = {}
+    new_pokemon = pokemon.previous_evolution
     if pokemon.previous_evolution:
-        new_pokemon = pokemon.previous_evolution
         previous_evolution_pokemon = {
             'title_ru': new_pokemon.title,
             'pokemon_id': new_pokemon.id,
@@ -84,8 +84,8 @@ def show_pokemon(request, pokemon_id):
         dict_pokemon['previous_evolution'] = previous_evolution_pokemon
 
     next_evolution_pokemon = {}
+    new_pokemon1 = pokemon.next_evolutions.first()
     if pokemon.next_evolutions.all():
-        new_pokemon1 = pokemon.next_evolutions.first()
         next_evolution_pokemon = {
             'title_ru': new_pokemon1.title,
             'pokemon_id': new_pokemon1.id,
@@ -94,8 +94,7 @@ def show_pokemon(request, pokemon_id):
         dict_pokemon['next_evolution'] = next_evolution_pokemon
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
-    if pokemon.id == int(pokemon_id):
-        requested_pokemons = PokemonEntity.objects.filter(pokemon=pokemon, appeared_at__lt=right_now, disappeared_at__gt=right_now)
+    requested_pokemons = PokemonEntity.objects.filter(pokemon=pokemon, appeared_at__lt=right_now, disappeared_at__gt=right_now)
     for pokemon_entity in requested_pokemons:
         add_pokemon(
             folium_map, pokemon_entity.latitude,
